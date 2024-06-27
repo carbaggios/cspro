@@ -2,13 +2,40 @@
 {
     public class Deck
     {
+        /// <summary>
+        /// Contains the list of cards
+        /// </summary>
         public List<Card> List { get; set; }
 
+        /// <summary>
+        /// The total cost of the deck of cards
+        /// </summary>
+        public int Cost { get { return List.Sum(s => s.Value); } }
+
+        /// <summary>
+        /// Create the list of cards in shuffle mode
+        /// </summary>
         public Deck() 
         {
             List = CreateList(shuffle: true);
         }
 
+        /// <summary>
+        /// Create the list of cards in deckType mode
+        /// </summary>
+        /// <param name="deckType">Specifies the creation method for main or user mode of deck</param>
+        public Deck(DeckType deckType)
+        {
+            if (deckType == DeckType.Main)
+                List = CreateList(shuffle: true);
+            else
+                List = new List<Card>();
+        }
+
+        /// <summary>
+        /// Create the list of cards using the shuffle parameter
+        /// </summary>
+        /// <param name="shuffle">Specifies the creation method for sorting mode: false - arrange the elements, true - shuffle the elements in the deck of a sequence in random mode</param>
         public Deck(bool shuffle)
         {
             List = CreateList(shuffle);
@@ -31,27 +58,32 @@
             return cards;
         }
 
+        /// <summary>
+        /// Method <c>Shuffle</c> Shuffle the elements in the deck of a sequence in random mode
+        /// </summary>
         public void Shuffle()
         {
             List<Card> deck = List;
             Shuffle(ref deck);
         }
 
+        /// <summary>
+        /// Method <c>Arrange</c> Sorts the elements in the deck of a sequence in ascending order according to card index and suit
+        /// </summary>
         public void Arrange() => 
             List = List.OrderBy(s => (s.Index, s.Suit)).ToList();
 
         private void Shuffle(ref List<Card> cards)
         {
-            Random r = new Random(DateTime.Now.Millisecond);
-            //Random r = new Random(new Random().Next(int.MaxValue));
+            Random r = new Random((int)DateTime.Now.Ticks);
 
             for (int n = cards.Count - 1; n > 0; --n)
             {
                 int k = r.Next(n + 1);
 
-                Card temp = cards[n];
+                Card tmp = cards[n];
                 cards[n] = cards[k];
-                cards[k] = temp;
+                cards[k] = tmp;
             }
         }
 
@@ -94,5 +126,20 @@
                 Index = index
             };
         }
+    }
+
+    /// <summary>
+    /// The type of deck
+    /// </summary>
+    public enum DeckType
+    {
+        /// <summary>
+        /// Play deck
+        /// </summary>
+        Main,
+        /// <summary>
+        /// User deck
+        /// </summary>
+        User
     }
 }
