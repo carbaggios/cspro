@@ -73,7 +73,7 @@
             Console.WriteLine("6. Створіть консольну програму для карткової гри «21» з простими правилами".PadRight(50, '.'));
 
             Game game = new Game();
-            game.Play();
+            game.StartGame();
         }
     }
 }

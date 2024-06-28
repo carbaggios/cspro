@@ -1,28 +1,24 @@
 ﻿namespace Homework4
 {
-    internal class Player
+    internal class Player : IDisposable
     {
+        private bool _disposed = false;
         public bool AIMode { get; }
         public string Name { get; set; }
         public Deck Deck { get; }
-        
-        public Player()
-        {
-            AIMode = false;
-            Name = "Player1";
-            Deck = new Deck(DeckType.User);
-        }
-        public Player(string name)
-        {
-            AIMode = false;
-            Name = name;
-            Deck = new Deck(DeckType.User);
-        }
+
+        private bool _isFinished = false;
+        public bool IsFinished { get { return _isFinished; } }
+
+        public event Action<Player>? OnFinishedGame;
+
+        public Player() 
+            : this(isComputer: false){}
 
         public Player(bool isComputer)
         {
             AIMode = isComputer;
-            Name = "Player2 (Computer)";
+            Name = isComputer ? "Player2 (Computer)" : "Player1";
             Deck = new Deck(DeckType.User);
         }
 
@@ -33,6 +29,31 @@
         public void TakeCard(Card card)
         {
             Deck.List.Add(card);
+        }
+
+        public void FinishGame()
+        {
+            _isFinished = true;
+            OnFinishedGame?.Invoke(this);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Name = null;
+                }
+
+                _disposed = true;
+            }
         }
     }
 }

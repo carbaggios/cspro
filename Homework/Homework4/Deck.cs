@@ -1,7 +1,9 @@
 ﻿namespace Homework4
 {
-    public class Deck
+    public class Deck : IDisposable
     {
+        private bool _disposed = false;
+
         /// <summary>
         /// Contains the list of cards
         /// </summary>
@@ -125,6 +127,25 @@
                 Name = name,
                 Index = index
             };
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    List = null;
+                }
+
+                _disposed = true;
+            }
         }
     }
 
