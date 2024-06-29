@@ -31,8 +31,7 @@ namespace Homework4
 
             MyConsole.WriteLine("Game \"21\" started".PadRight(50, '.'));
 
-            int firstPlayerNumber;
-            firstPlayerNumber = ChoosePlayer();
+            int firstPlayerNumber = ChoosePlayer();
 
             if (firstPlayerNumber == 1)
                 Play(Player1, Player2);
