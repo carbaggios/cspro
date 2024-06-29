@@ -15,11 +15,16 @@ namespace Homework4
 
         public Game(){}
 
+        /// <summary>
+        /// The entry point to the Game
+        /// </summary>
         public void StartGame()
         {
             _player1 = new Player();
             _player2 = new Player(isComputer: true);
             _deck = new Deck();
+
+            //PrintMainDeck();
 
             Player1.OnFinishedGame += Player_OnFinishedGame;
             Player2.OnFinishedGame += Player_OnFinishedGame;
@@ -34,7 +39,7 @@ namespace Homework4
             else
                 Play(Player2, Player1);
 
-            MyConsole.WriteLine("Do you want to play again? Print 'Y' (yes) or 'N' (no) to make your choice");
+            MyConsole.WriteLine("Do you want to play again? Type 'Y' (yes) or 'N' (no) to make your choice");
 
             string? inputString = MyConsole.ReadLine()?.ToLower();
 
@@ -48,7 +53,7 @@ namespace Homework4
                 StartGame();
             }
 
-            Console.WriteLine("Game over! Do you want to save the output log file? Print 'Y' (yes) or 'N' (no) to make your choice");
+            Console.WriteLine("Game over! Do you want to save the output log file? Type 'Y' (yes) or 'N' (no) to make your choice");
 
             inputString = Console.ReadLine()?.ToLower();
 
@@ -100,7 +105,7 @@ namespace Homework4
                     return;
                 }
 
-                MyConsole.WriteLine($"{currentPlayer.Name}, do you want to take the next card? Print 'Y' (yes) or 'N' (no) to make your choice");
+                MyConsole.WriteLine($"{currentPlayer.Name}, do you want to take the next card? Type 'Y' (yes) or 'N' (no) to make your choice");
                 
                 string? inputString = MyConsole.ReadLine()?.ToLower();
 
@@ -169,7 +174,7 @@ namespace Homework4
             player.TakeCard(Deck.List[1]);
             Deck.List.Remove(Deck.List[0]);
             Deck.List.Remove(Deck.List[1]);
-            MyConsole.WriteLine($"{player.Name} took a cards");
+            MyConsole.WriteLine($"{player.Name} took cards");
         }
 
         private void TakeOneCard(Player player)
@@ -181,7 +186,7 @@ namespace Homework4
 
         private int ChoosePlayer()
         {
-            MyConsole.WriteLine("Please choose the player to take a cards first (press [1] for Player1 (You) or [2] for Player2 (Computer))");
+            MyConsole.WriteLine("Please choose the player to take cards first (press [1] to select Player1 or [2] to select Player2 (Computer))");
             
             string? inputPlayerNumberString = MyConsole.ReadLine();
             int firstPlayerNumber;
@@ -217,8 +222,22 @@ namespace Homework4
             if (CheckEndGame())
                 PrintWinner();
         }
+
+        //Show the main deck list of cards
+        private void PrintMainDeck()
+        {
+            MyConsole.WriteLine();
+            MyConsole.WriteLine("The main deck is:");
+            foreach (Card card in Deck.List)
+            {
+                MyConsole.WriteLine($"{Deck.List.IndexOf(card) + 1}. {GetCardDescription(card)}");
+            }
+        }
     }
 
+    /// <summary>
+    /// The logger clas for console
+    /// </summary>
     public static class MyConsole
     {
         public static StringBuilder Output = new StringBuilder();

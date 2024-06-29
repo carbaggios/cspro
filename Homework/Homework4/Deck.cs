@@ -18,9 +18,7 @@
         /// Create the list of cards in shuffle mode
         /// </summary>
         public Deck() 
-        {
-            List = CreateList(shuffle: true);
-        }
+            : this(shuffle: true){}
 
         /// <summary>
         /// Create the list of cards in deckType mode
@@ -38,10 +36,23 @@
         /// Create the list of cards using the shuffle parameter
         /// </summary>
         /// <param name="shuffle">Specifies the creation method for sorting mode: false - arrange the elements, true - shuffle the elements in the deck of a sequence in random mode</param>
-        public Deck(bool shuffle)
-        {
+        public Deck(bool shuffle) =>
             List = CreateList(shuffle);
+
+        /// <summary>
+        /// Method <c>Shuffle</c> Shuffle the elements in the deck of a sequence in random mode
+        /// </summary>
+        public void Shuffle()
+        {
+            List<Card> deck = List;
+            Shuffle(ref deck);
         }
+
+        /// <summary>
+        /// Method <c>Arrange</c> Sorts the elements in the deck of a sequence in ascending order according to card index and suit
+        /// </summary>
+        public void Arrange() => 
+            List = List.OrderBy(s => (s.Index, s.Suit)).ToList();
 
         private List<Card> CreateList(bool shuffle = false)
         {
@@ -59,21 +70,6 @@
 
             return cards;
         }
-
-        /// <summary>
-        /// Method <c>Shuffle</c> Shuffle the elements in the deck of a sequence in random mode
-        /// </summary>
-        public void Shuffle()
-        {
-            List<Card> deck = List;
-            Shuffle(ref deck);
-        }
-
-        /// <summary>
-        /// Method <c>Arrange</c> Sorts the elements in the deck of a sequence in ascending order according to card index and suit
-        /// </summary>
-        public void Arrange() => 
-            List = List.OrderBy(s => (s.Index, s.Suit)).ToList();
 
         private void Shuffle(ref List<Card> cards)
         {

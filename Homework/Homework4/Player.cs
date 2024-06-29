@@ -31,6 +31,10 @@
             Deck.List.Add(card);
         }
 
+        /// <summary>
+        /// Method <c>FinishGame</c> Setter for IsFinished property
+        /// </summary>
+        /// <param name="card">The card to taking</param>
         public void FinishGame()
         {
             _isFinished = true;
