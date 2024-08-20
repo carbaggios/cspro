@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -142,11 +144,48 @@ namespace Homework11
             Console.WriteLine(
                 string.Join(',',
                     data.Where(x => x.GetType() == typeof(Film))
-                        .Select(x => new { Actor = (((Film)x).Actors).SelectMany(x => x.Name), Film = ((Film)x).Name })
+                    .SelectMany(x => ((Film)x).Actors, (film, actor) => new { ActorName = actor.Name, FilmName = ((Film)film).Name })
                     )
                 );
             Console.WriteLine();
 
+            Console.WriteLine("10. Виведіть суму загальної кількості сторінок у всіх книгах і всі значення int у всіх послідовностях у даних:");
+            Console.WriteLine(
+                string.Join(',',
+                    data.Where(x => x.GetType() == typeof(Book))
+                        .Sum(x => ((Book)x).Pages)
+                    )
+                );
+            Console.WriteLine(
+                string.Join(',',
+                    data.Where(x => x.GetType() == typeof(List<int>))
+                    .Select(x => ((List<int>)x).Count)
+                    )
+                );
+            Console.WriteLine();
+
+            Console.WriteLine("11. Отримати словник з ключем - автор книги, значенням - список авторських книг:");
+            Console.WriteLine(
+                string.Join(',',
+                    data.Where(x => x.GetType() == typeof(Book))
+                        .Select(x => new { Author = ((Book)x).Author, Books = new List<Book> { (Book)x } })
+                        .ToDictionary(Key => Key.Author, Value => Value.Books)
+                    )
+                );
+            Console.WriteLine();
+
+            Console.WriteLine("12. Вивести всі фільми \"Метт Деймон\", за винятком фільмів з акторами, імена яких представлені в даних у вигляді рядків:");
+            Console.WriteLine(
+                string.Join(',',
+                    data.Where(x => x.GetType() == typeof(Film))
+                    .SelectMany(x => ((Film)x).Actors, (film, actor) => new { ActorName = actor.Name, Film = ((Film)film) })
+                    .Where(x => x.ActorName == "Matt Damon" 
+                        && !x.Film.Actors.Any(a => data.Where(x => x.GetType() == typeof(string)).Select(x => x).Contains(a.Name))
+                        )
+                    .Select(x => new { Actor = x.ActorName, Film = x.Film.Name })
+                    )
+                );
+            Console.WriteLine();
         }
     }
 
